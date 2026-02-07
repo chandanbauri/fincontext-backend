@@ -6,3 +6,7 @@ python-dotenv
 openai
 pypdf
 requests
+sqlmodel
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
