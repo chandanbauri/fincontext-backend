@@ -1,0 +1,8 @@
+elasticsearch
+pandas
+fastapi
+uvicorn
+python-dotenv
+openai
+pypdf
+requests
