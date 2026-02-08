@@ -20,7 +20,7 @@ from auth_utils import verify_password, get_password_hash, create_access_token, 
 
 load_dotenv()
 
-# Database Setup
+                
 sqlite_file_name = "fincontext.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 engine = create_engine(sqlite_url, connect_args={"check_same_thread": False})
@@ -32,7 +32,7 @@ def get_session():
     with Session(engine) as session:
         yield session
 
-# Elastic Setup
+               
 ELASTIC_ENDPOINT = os.getenv("ELASTIC_ENDPOINT", "")
 KIBANA_ENDPOINT = ELASTIC_ENDPOINT.replace(".es.", ".kb.")
 if not KIBANA_ENDPOINT:
@@ -40,10 +40,15 @@ if not KIBANA_ENDPOINT:
 
 app = FastAPI(title="FinContext API")
 
-# Enable CORS for React frontend
+                                
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -59,7 +64,7 @@ es = Elasticsearch(
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-# Auth Functions
+                
 async def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Depends(get_session)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -83,7 +88,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), session: Session
 def on_startup():
     create_db_and_tables()
 
-# Endpoints
+           
 @app.post("/signup", response_model=User)
 def signup(user_in: UserCreate, session: Session = Depends(get_session)):
     db_user = session.exec(select(User).where(User.username == user_in.username)).first()
@@ -217,7 +222,7 @@ async def upload_document(
 async def get_stats(current_user: User = Depends(get_current_user)):
     print(f"DEBUG: STATS REQUESTED FOR {current_user.username}")
     try:
-        # 1. Total Spending (Debits)
+                                    
         spending_res = es.search(
             index="fincontext-transactions",
             query={
@@ -235,7 +240,7 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         )
         total_spending = spending_res['aggregations']['total_spending']['value'] or 0
 
-        # 2. Total Income (Credits)
+                                   
         income_res = es.search(
             index="fincontext-transactions",
             query={
@@ -253,7 +258,7 @@ async def get_stats(current_user: User = Depends(get_current_user)):
         )
         total_income = income_res['aggregations']['total_income']['value'] or 0
 
-        # 3. Top Category
+                         
         category_res = es.search(
             index="fincontext-transactions",
             query={

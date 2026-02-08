@@ -18,9 +18,9 @@ def generate_transactions(user_name, filename):
     data = []
     start_date = datetime.now() - timedelta(days=60)
     
-    # Alice: High spender, low investment
-    # Bob: Frugal, high investment
-    # Charlie: High income, high expenses
+                                         
+                                  
+                                         
     
     num_rows = 30
     if user_name == "alice":

@@ -4,7 +4,7 @@ In Phase 3, when you set up 'Tool B' in the Kibana Agent Builder, you can use th
 logic patterns to answer user questions about money.
 """
 
-# 1. Calculate Total Expenses by Category
+                                         
 QUERY_EXPENSES_BY_CATEGORY = """
 FROM fincontext-transactions
 | WHERE Type == "Debit"
@@ -12,7 +12,7 @@ FROM fincontext-transactions
 | SORT total_amount DESC
 """
 
-# 2. Find specific large transactions
+                                     
 QUERY_LARGE_TRANSACTIONS = """
 FROM fincontext-transactions
 | WHERE Amount > 1000
@@ -20,7 +20,7 @@ FROM fincontext-transactions
 | LIMIT 5
 """
 
-# 3. Monthly Spend Trend
+                        
 QUERY_MONTHLY_TREND = """
 FROM fincontext-transactions
 | EVAL month = DATE_TRUNC(1 month, Date)
@@ -28,7 +28,7 @@ FROM fincontext-transactions
 | SORT month ASC
 """
 
-# 4. Search for a specific merchant (e.g., Zomato)
+                                                  
 QUERY_MERCHANT_SEARCH = """
 FROM fincontext-transactions
 | WHERE Description LIKE "%Zomato%"
